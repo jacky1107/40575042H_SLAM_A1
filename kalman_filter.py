@@ -28,21 +28,18 @@ def U(ax, ay):
 def inverse(array):
     return np.linalg.inv(array)
 
-true = pickle.load(open("a_position/true.pickle","rb"))
-track1 = pickle.load(open("a_position/track1.pickle","rb"))
-track2 = pickle.load(open("a_position/track2.pickle","rb"))
-track3 = pickle.load(open("a_position/track3.pickle","rb"))
+true = pickle.load(open("b_velocity/true.pickle","rb"))
+track1 = pickle.load(open("b_velocity/track1.pickle","rb"))
+track2 = pickle.load(open("b_velocity/track2.pickle","rb"))
+track3 = pickle.load(open("b_velocity/track3.pickle","rb"))
 
 # for observation position
 ZZ = [track1, track2, track3]
 j = 1
 for Z in ZZ:
     # for F and B
-    t = 0#0.01
+    t = 0.01
 
-    x_noise = np.random.normal(0, Z[:,0].std(), 200)
-    y_noise = np.random.normal(0, Z[:,1].std(), 200)
-    ax, ay = 0, 0# x_noise, y_noise
     FT = F(t).transpose()
 
     # for state X
@@ -77,6 +74,9 @@ for Z in ZZ:
     #==================================================================
     # formula
     for i in range(len(true)):
+        x_noise = float(np.random.normal(0, Z[:,0].std(), 1))
+        y_noise = float(np.random.normal(0, Z[:,1].std(), 1))
+        ax, ay = 0, 0 # x_noise, y_noise
         X_= dot(F(t), X) + dot(B(t), U(ax, ay)) + W
 
         P_= dot(F(t), P, FT) + Q
@@ -115,3 +115,16 @@ for Z in ZZ:
     plt.plot(range(len(var_err_Y)), var_err_Y, c='g')
     j += 1
 plt.show()
+# mean_square:
+# 0.636179869565755
+# mean_square:
+# 0.5782825118898182
+# mean_square:
+# 0.6395039627107276
+
+# mean_square:
+# 0.6852179896900644
+# mean_square:
+# 0.6154745036526241
+# mean_square:
+# 0.6574917688622124
