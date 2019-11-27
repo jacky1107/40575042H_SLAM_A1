@@ -39,29 +39,35 @@ j = 1
 for Z in ZZ:
     # for F and B
     t = 0.01
+    
+    Z[:,0] += np.random.normal(0, 2, 200)
+    Z[:,1] += np.random.normal(0, 4, 200)
 
     FT = F(t).transpose()
 
     # for state X
-    x_position = true[0,0]
-    y_position = true[0,1]
+    x_data = true[:,0]
+    y_data = true[:,1]
 
     X = np.zeros((4,1))
     X_= np.zeros((4,1))
 
     # for variance P
     P = np.eye(4)
-
+    
     # for observation error
-    R = np.array([[(Z[:,0].std())**2, 0],
-                  [0, (Z[:,1].std())**2]])
-
+    R = np.eye(2)
+    if t != 0:
+	    R *= t
+    
     # for noise
-    W = 1e-3
+    W = 1e-2
 
     #processNoiseCov
-    Q = Z[:,0].std() * Z[:,1].std()
-
+    Q = np.eye(4)
+    if t != 0:
+	    Q *= t
+    
     # for Identity Matrix
     I = np.eye(4)
     H = np.array([[1, 0, 0, 0],
@@ -71,17 +77,25 @@ for Z in ZZ:
     kalmanX, kalmanY = [], []
     var_err_X, var_err_Y = [], []
     error_obv, error_kal = [], []
+    
+    sx = 0
+    sy = 0
+    for i in range(len(x_data)):
+        sx += (x_data.mean() - x_data[i])**2
+        sy += (y_data.mean() - y_data[i])**2
+        
+    x_var = sx/len(x_data)
+    y_var = sy/len(y_data)
     #==================================================================
     # formula
     for i in range(len(true)):
-        x_noise = float(np.random.normal(0, Z[:,0].std(), 1))
-        y_noise = float(np.random.normal(0, Z[:,1].std(), 1))
-        ax, ay = 0, 0 # x_noise, y_noise
+        ax = float(np.random.normal(0, np.sqrt(x_var), 1))
+        ay = float(np.random.normal(0, np.sqrt(y_var), 1))
+
         X_= dot(F(t), X) + dot(B(t), U(ax, ay)) + W
 
         P_= dot(F(t), P, FT) + Q
-
-        P_= P_*I
+        
         K = dot(dot(P_, HT), inverse(dot(H, P_, HT) + R))
 
         S = Z[i].reshape((2,1)) - dot(H, X_)
@@ -114,17 +128,5 @@ for Z in ZZ:
     plt.plot(range(len(var_err_X)), var_err_X, c='orange')
     plt.plot(range(len(var_err_Y)), var_err_Y, c='g')
     j += 1
-plt.show()
-# mean_square:
-# 0.636179869565755
-# mean_square:
-# 0.5782825118898182
-# mean_square:
-# 0.6395039627107276
 
-# mean_square:
-# 0.6852179896900644
-# mean_square:
-# 0.6154745036526241
-# mean_square:
-# 0.6574917688622124
+plt.show()
