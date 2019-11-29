@@ -52,7 +52,8 @@ for data in datas:
         plt.subplot(3,3,draw)
         plt.title(name[index])
         if index == 0: plt.ylabel("path")
-        print(f"mean square error is {round((sum(error_kal)/len(error_kal)) / (sum(error_obv)/len(error_obv)), 2)}")
+        mse = round((sum(error_kal)/len(error_kal)) / (sum(error_obv)/len(error_obv)), 2)
+        print(f"mean square error is {mse}")
         plt.plot(true[:,0],true[:,1], label="true", c='r')
         plt.scatter(Z[:,0],Z[:,1],c='orange', s=2, label="measure")
         plt.plot(kalmanX, kalmanY, c='g', label="kalman")
@@ -72,10 +73,15 @@ for data in datas:
             
         plt.subplot(3,3,6+draw)
         if index == 0: plt.ylabel("variance")
+        plt.xlabel(f"error={mse}")
         plt.plot(range(len(var_kal)), var_kal, c='g', label="kalman")
         plt.legend()
         print("")
         index += 1
-    count += 1
 
+    file_name = f'output/data{count}.png'
+    plt.savefig(file_name)
+    count += 1
+    
 plt.show()
+
