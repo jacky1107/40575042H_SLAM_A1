@@ -1,4 +1,6 @@
+import os
 import numpy as np
+import pickle
 class Kalman_filter(object):
     def __init__(self, 
                  order=4,
@@ -30,7 +32,7 @@ class Kalman_filter(object):
     def controlVector(self, ax=0, ay=0):
         return np.array([[ax], [ay]])
     def stateVarMatrix(self):
-    	return np.eye(self.order) * 1000
+        return np.eye(self.order) * 5000
     def measureNoiseCovMatrix(self, time=0):
         R = np.eye(int(self.order/2))
         return R * time if time != 0 else R
@@ -85,64 +87,41 @@ class Kalman_filter(object):
         self.set_varMatrix(self.P)
         return self.X, self.P
 
-import matplotlib.pyplot as plt
-import pickle
-true = pickle.load(open("data2/true2.pickle","rb"))
-tracka = pickle.load(open("data2/position2.pickle","rb"))
-trackb = pickle.load(open("data2/velocity2.pickle","rb"))
-trackc = pickle.load(open("data2/acceleration2.pickle","rb"))
+    def get_measurement(self):
+        CURRENT_PATH = os.path.join(os.getcwd(), "lib/")
+        DATA = []
+        for i in os.listdir(CURRENT_PATH):
+            if "data" in i: DATA.append(i)
+        data1, data2, data3, data4 = [], [], [], []
+        for data in DATA:
+            path = os.path.join(CURRENT_PATH, data)
+            for i in os.listdir(path):
+                pick = os.path.join(path, i)
+                if str(i[0]) == "1":
+                    data1.append(pick)
+                elif str(i[0]) == "2":
+                    data2.append(pick)
+                elif str(i[0]) == "3":
+                    data3.append(pick)
+                elif str(i[0]) == "4":
+                    data4.append(pick)
 
-measure = [tracka, trackb, trackc]
-time = [0, 0.01, 0.01]
-draw = 1
-for index in range(len(measure)):
-    Z = measure[index]
-    t = time[index]
-    
-    kf = Kalman_filter(4, time=t)
-    
-    kalmanX, kalmanY = [], []
-    error_obv, error_kal = [], []
-    var_kal = []
-    for i in range(len(Z)):
-        if index == 2:
-            ax = float(np.random.normal(0, 3, 1))
-            ay = float(np.random.normal(0, 3, 1))
-            kf.U = kf.controlVector(ax, ay)
-        
-        x_predict, p_predict = kf.predict()
-        X, P = kf.update(Z[i])
 
-        error_obv.append( (true[i,0]-Z[i,0])**2+(true[i,1]-Z[i,1])**2)
-        error_kal.append( (true[i,0]-X[0,0])**2+(true[i,1]-X[1,0])**2)
+        data1 = sorted(data1)
+        data2 = sorted(data2)
+        data3 = sorted(data3)
+        data4 = sorted(data4)
 
-        kalmanX.append(X[0,0])
-        kalmanY.append(X[1,0])
+        data1[2], data1[0] = data1[0], data1[2]
+        data1[3], data1[2] = data1[2], data1[3]
 
-        var_kal.append(P[0,0])
+        data2[2], data2[0] = data2[0], data2[2]
+        data2[3], data2[2] = data2[2], data2[3]
 
-    plt.subplot(3,3,draw)
-    print(f"mean square error is {(sum(error_kal)/len(error_kal)) / (sum(error_obv)/len(error_obv))}")
-    plt.plot(true[:,0],true[:,1])
-    plt.plot(Z[:,0],Z[:,1],c='orange')
-    plt.plot(kalmanX, kalmanY, c='g')
+        data3[2], data3[0] = data3[0], data3[2]
+        data3[3], data3[2] = data3[2], data3[3]
 
-    plt.subplot(3,3,3+draw)
-    plt.plot(range(len(error_obv)), error_obv, c='orange')
-    plt.plot(range(len(error_kal)), error_kal, c='g')
+        data4[2], data4[0] = data4[0], data4[2]
+        data4[3], data4[2] = data4[2], data4[3]
 
-    var_kal = np.array(var_kal) * (1 / max(var_kal))
-    stop = 1e-2
-    first = var_kal[0]
-    for i, v in enumerate(var_kal):
-        if i == 0: continue
-        if (first - v) < stop:
-            print(f'variance reduced to {stop} after {i} iteration')
-            break
-        first = v
-        
-    plt.subplot(3,3,6+draw)
-    plt.plot(range(len(var_kal)), var_kal, c='g')
-    draw += 1
-    
-plt.show()
+        return data1, data2, data3, data4
