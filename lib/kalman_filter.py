@@ -32,7 +32,7 @@ class Kalman_filter(object):
     def controlVector(self, ax=0, ay=0):
         return np.array([[ax], [ay]])
     def stateVarMatrix(self):
-        return np.eye(self.order) * 5000
+        return np.eye(self.order)
     def measureNoiseCovMatrix(self, time=0):
         R = np.eye(int(self.order/2))
         return R * time if time != 0 else R
