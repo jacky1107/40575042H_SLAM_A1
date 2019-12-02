@@ -6,7 +6,7 @@ All code is written in Python, if there is any question please feel free to ask.
 
 # How to Compile the program
 
-Please make sure you have install those packages.
+Please make sure you have installed those packages.
 ```
 numpy
 matplotlib
@@ -17,8 +17,29 @@ Running:
 ``
 python main.py [-s] [save_img, default:True]
 ``
+After running main.py, it will show these infomation below:  
+1. The true path of the robot  
+2. The output of the Kalman Filter for the path of the robot  
+3. In a separate subwindow show the variance of the Kalman Filter against time  
+4. In a separate subwindow show the error of the Kalman Filter path against time  
+5. Average error  
+6. variance of error  
 
+# Object detection example using Kalman filter
+Also make sure you have installed this package.
+```
+cv2
+```
+Running:
+``
+python find_targeting_kalman_filter.py
+``
 
+This example will detect object with color blue.  
+And green point is predicted value of Kalman value.  
+Red point is true point which is centroid of object.
+
+The result shows that the green point will track the red point as much as possible.  
 
 # Kalman filter notes
 
