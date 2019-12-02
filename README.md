@@ -2,7 +2,7 @@
 
 author: Jacky Wang
 
-All code is written in Python, if there is any problem please feel free to write commit below.
+All code is written in Python, if there is any question please feel free to ask.
 
 # How to Compile the program
 
@@ -13,18 +13,25 @@ matplotlib
 pickle
 ```
 
+Running:
+``
+python main.py [-s] [save_img, default:True]
+``
+
+
+
 # Kalman filter notes
 
-F: transition Matrix
-X: state matrix
-U: control variable matrix
-W: noise in the process
-t: time for 1 circle
-H: measurement Matrix
+F: transition Matrix  
+X: state matrix  
+U: control variable matrix  
+W: noise in the process  
+t: time for 1 circle  
+H: measurement Matrix  
 
-P: state covariance matrix (error in the estimate)
-If P -> 0:
-    Then measurement updates are mostly ignored
+P: state covariance matrix (error in the estimate)  
+If P -> 0:  
+Then measurement updates are mostly ignored
 
 P = [[ var_11, cvar12],
      [ cvar12, var_22]]  
