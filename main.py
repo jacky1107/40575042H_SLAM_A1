@@ -43,6 +43,8 @@ for data in datas:
         error_obv, error_kal = [], []
         error_o, error_k = [], []
         var_kal = []
+        error_obv1, error_kal1 = [], []
+
         last_vx, last_vy = 0, 0
         for i in range(len(Z)):
             x_predict, p_predict = kf.predict()
@@ -57,8 +59,11 @@ for data in datas:
             error_o.append( (true[i,0]-Z[i,0])**2+(true[i,1]-Z[i,1])**2)
             error_k.append( (true[i,0]-X[0,0])**2+(true[i,1]-X[1,0])**2)
 
-            error_obv.append( (true[i,0]-Z[i,0])+(true[i,1]-Z[i,1]))
-            error_kal.append( (true[i,0]-X[0,0])+(true[i,1]-X[1,0]))
+            error_obv.append((true[i,0]-Z[i,0]))
+            error_kal.append((true[i,0]-X[0,0]))
+
+            error_obv1.append((true[i,1]-Z[i,1]))
+            error_kal1.append((true[i,1]-X[1,0]))
 
             kalmanX.append(X[0,0])
             kalmanY.append(X[1,0])
@@ -81,8 +86,8 @@ for data in datas:
 
         plt.subplot(3,3,3+draw)
         if index == 0: plt.ylabel("error")
-        plt.plot(range(len(error_obv)), error_obv, c='orange', label="measure")
-        plt.plot(range(len(error_kal)), error_kal, c='g', label="kalman")
+        plt.plot(range(len(error_o)), error_o, c='orange', label="measure")
+        plt.plot(range(len(error_k)), error_k, c='g', label="kalman")
         plt.legend()
 
         var_kal = np.array(var_kal) * (1 / max(var_kal))
@@ -90,15 +95,22 @@ for data in datas:
         obv_var = np.array(error_obv).std()**2
         kal_var = np.array(error_kal).std()**2
 
+        obv_var1 = np.array(error_obv1).std()**2
+        kal_var1 = np.array(error_kal1).std()**2
+
         plt.subplot(3,3,6+draw)
         if index == 0: plt.ylabel("variance")
         label = f"mean square error={mse[-1]}\n"
-        label += f"variance of measure={round(obv_var,2)}\n"
-        label += f"variance of kalman={round(kal_var,2)}"
+        label += f"variance of measure error: x={round(obv_var,2)} y={round(obv_var1,2)}\n"
+        label += f"variance of kalman error: x={round(kal_var,2)} y={round(kal_var1,2)}"
 
         if draw == 3:
-            label += f"    average error = {round(sum(mse)/len(mse),2)}"
-
+            plt.text(150, 0.8, f'average error = {round(sum(mse)/len(mse),2)}',
+                horizontalalignment='center',
+                verticalalignment='center',
+                c='r'
+                )
+            
         plt.xlabel(label)
         plt.plot(range(len(var_kal)), var_kal, c='g', label="kalman")
         plt.legend()
