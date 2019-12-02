@@ -19,7 +19,7 @@ Running:
 ``
 python main.py [-s] [save_img, default:True]
 ``
-The saved image will save into output folder  
+The saved image will save into output folder   
 After running main.py, it will show these infomation below:  
 1. The true path of the robot  
 2. The output of the Kalman Filter for the path of the robot  
@@ -40,7 +40,7 @@ python find_targeting_kalman_filter.py
 ``
 
 This example will detect object with color blue.  
-And green point is predicted value of Kalman value.  
+And green point is predicted value of Kalman filter.  
 Red point is true point which is centroid of object.
 
 The result shows that the green point will track the red point as much as possible.  
