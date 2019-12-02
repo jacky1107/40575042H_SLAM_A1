@@ -45,7 +45,7 @@ if R -> unlimited:
     then K -> 0 (adjust primarily with the predicted state)
 
 # Reference
-http://www.sherrytowers.com/kalman_filter_method.pdf
+http://www.sherrytowers.com/kalman_filter_method.pdf \n
 http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
 http://web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter.pdf
 https://zhuanlan.zhihu.com/p/40413223
