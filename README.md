@@ -1,4 +1,4 @@
-# kalman_filter
+# Kalman Filter
 
 author: Jacky Wang
 
@@ -13,10 +13,13 @@ matplotlib
 pickle
 ```
 
+- troubleshooting: pickle is not available if python.version < 3.6
+
 Running:
 ``
 python main.py [-s] [save_img, default:True]
 ``
+The saved image will save into output folder  
 After running main.py, it will show these infomation below:  
 1. The true path of the robot  
 2. The output of the Kalman Filter for the path of the robot  
@@ -26,9 +29,10 @@ After running main.py, it will show these infomation below:
 6. variance of error  
 
 # Object detection example using Kalman filter
-Also make sure you have installed this package.
+Interesting features and extensions of Kalman filter.
+After running the code, make sure you have installed this package.
 ```
-cv2
+pip install opencv-python
 ```
 Running:
 ``
@@ -79,8 +83,3 @@ http://web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter
 https://zhuanlan.zhihu.com/p/40413223  
 https://dsp.stackexchange.com/questions/50026/using-the-kalman-filter-given-acceleration-to-estimate-position-and-velocity  
 https://www.youtube.com/watch?v=CaCcOwJPytQ&list=PLX2gX-ftPVXU3oUFNATxGXY90AULiqnWT  
-
-
-(c) any interesting features and extensions of your assignment.
-
-    
