@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-from lib import kalman_filter
+from lib.kalman_filter import Kalman_filter
 
 cap = cv2.VideoCapture(0)
 
@@ -81,7 +81,7 @@ def open_video(cap):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         
-kf = kalman_filter(time=0.001)
+kf = Kalman_filter(time=0.001)
 open_video(cap)
 cap.release()
 cv2.destroyAllWindows()
